@@ -1,0 +1,94 @@
+﻿
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BlazorFullStackCrud.Server.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeesController : ControllerBase
+    {
+        private readonly DataContext _context;
+
+        public EmployeesController(DataContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Employee>>> GetEmployees()
+        {
+            var emp = await _context.Employees.Include(sh => sh.Department).ToListAsync();
+            return Ok(emp);
+        }
+
+        [HttpGet("departments")]
+        public async Task<ActionResult<List<Department>>> GetDepartments()
+        {
+            var dep = await _context.Departments.ToListAsync();
+            return Ok(dep);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Employee>> GetSingleEmployee(int id)
+        {
+            var emp = await _context.Employees
+                .Include(h => h.Department)
+                .FirstOrDefaultAsync(h => h.Id == id);
+            if (emp == null)
+            {
+                return NotFound("Sorry, no employee here. :/");
+            }
+            return Ok(emp);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Employee>>> CreateEmployee(Employee hero)
+        {
+            hero.Department = null;
+            _context.Employees.Add(hero);
+            await _context.SaveChangesAsync();
+
+            return Ok(await GetDbEmployees());
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<Employee>>> UpdateEmployee(Employee hero, int id)
+        {
+            var dbHero = await _context.Employees
+                .Include(sh => sh.Department)
+                .FirstOrDefaultAsync(sh => sh.Id == id);
+            if (dbHero == null)
+                return NotFound("Sorry, but no employee for you. :/");
+
+            dbHero.FirstName = hero.FirstName;
+            dbHero.LastName = hero.LastName;
+            dbHero.position = hero.position;
+            dbHero.DepartmentId = hero.DepartmentId;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await GetDbEmployees());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Employee>>> DeleteEmployee(int id)
+        {
+            var dbEmp = await _context.Employees
+                .Include(sh => sh.Department)
+                .FirstOrDefaultAsync(sh => sh.Id == id);
+            if (dbEmp == null)
+                return NotFound("Sorry, but no hero for you. :/");
+
+            _context.Employees.Remove(dbEmp);
+            await _context.SaveChangesAsync();
+
+            return Ok(await GetDbEmployees());
+        }
+
+        private async Task<List<Employee>> GetDbEmployees()
+        {
+            return await _context.Employees.Include(sh => sh.Department).ToListAsync();
+        }
+    }
+}

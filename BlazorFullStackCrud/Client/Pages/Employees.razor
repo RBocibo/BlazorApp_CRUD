@@ -1,0 +1,51 @@
+﻿@page "/employees"
+@inject IEmployeeService EmployeeService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Employees Infor</PageTitle>
+
+<h3>Employees  Info</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>position</th>
+            <th>Department</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emps in EmployeeService.Employees)
+        {
+            <tr>
+                <td>@emps.FirstName</td>
+                <td>@emps.LastName</td>
+                <td>@emps.position</td>
+                <td>@emps.Department.Name</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowEmployee(emps.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewEmployee">Create New Employee</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await EmployeeService.GetEmployees();
+    }
+
+    void ShowEmployee(int id)
+    {
+        NavigationManager.NavigateTo($"emp/{id}");
+    }
+
+    void CreateNewEmployee()
+    {
+        NavigationManager.NavigateTo("/emp");
+    }
+}

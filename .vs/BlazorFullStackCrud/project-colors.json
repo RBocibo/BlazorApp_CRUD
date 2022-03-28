@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "1c8d3fb0-a57a-4c49-b8fa-02396793e020": {
+      "ProjectGuid": "1c8d3fb0-a57a-4c49-b8fa-02396793e020",
+      "DisplayName": "BlazorFullStackCrud.Client",
+      "ColorIndex": 0
+    },
+    "98be8088-ecff-4eee-b742-a9297901dbb1": {
+      "ProjectGuid": "98be8088-ecff-4eee-b742-a9297901dbb1",
+      "DisplayName": "BlazorFullStackCrud.Server",
+      "ColorIndex": 1
+    },
+    "fd8367f3-01a7-4cd2-8b3a-e86bc11bde68": {
+      "ProjectGuid": "fd8367f3-01a7-4cd2-8b3a-e86bc11bde68",
+      "DisplayName": "BlazorFullStackCrud.Shared",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 3
+}
