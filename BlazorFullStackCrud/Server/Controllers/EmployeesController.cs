@@ -18,7 +18,8 @@ namespace BlazorFullStackCrud.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Employee>>> GetEmployees()
         {
-            var emp = await _context.Employees.Include(sh => sh.Department).ToListAsync();
+            var emp = await _context.Employees
+                .Include(sh => sh.Department).ToListAsync();
             return Ok(emp);
         }
 
@@ -43,28 +44,28 @@ namespace BlazorFullStackCrud.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Employee>>> CreateEmployee(Employee hero)
+        public async Task<ActionResult<List<Employee>>> CreateEmployee(Employee Employee)
         {
-            hero.Department = null;
-            _context.Employees.Add(hero);
+            Employee.Department = null;
+            _context.Employees.Add(Employee);
             await _context.SaveChangesAsync();
 
             return Ok(await GetDbEmployees());
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Employee>>> UpdateEmployee(Employee hero, int id)
+        public async Task<ActionResult<List<Employee>>> UpdateEmployee(Employee employee, int id)
         {
-            var dbHero = await _context.Employees
+            var dbEmployee = await _context.Employees
                 .Include(sh => sh.Department)
                 .FirstOrDefaultAsync(sh => sh.Id == id);
-            if (dbHero == null)
+            if (dbEmployee == null)
                 return NotFound("Sorry, but no employee for you. :/");
 
-            dbHero.FirstName = hero.FirstName;
-            dbHero.LastName = hero.LastName;
-            dbHero.position = hero.position;
-            dbHero.DepartmentId = hero.DepartmentId;
+            dbEmployee.FirstName = employee.FirstName;
+            dbEmployee.LastName = employee.LastName;
+            dbEmployee.position = employee.position;
+            dbEmployee.DepartmentId = employee.DepartmentId;
 
             await _context.SaveChangesAsync();
 
@@ -78,7 +79,7 @@ namespace BlazorFullStackCrud.Server.Controllers
                 .Include(sh => sh.Department)
                 .FirstOrDefaultAsync(sh => sh.Id == id);
             if (dbEmp == null)
-                return NotFound("Sorry, but no hero for you. :/");
+                return NotFound("Sorry, but no employee for you. :/");
 
             _context.Employees.Remove(dbEmp);
             await _context.SaveChangesAsync();
@@ -88,7 +89,8 @@ namespace BlazorFullStackCrud.Server.Controllers
 
         private async Task<List<Employee>> GetDbEmployees()
         {
-            return await _context.Employees.Include(sh => sh.Department).ToListAsync();
+            return await _context.Employees
+                .Include(sh => sh.Department).ToListAsync();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace BlazorFullStackCrud.Client.Services.EmployeeService
 
         public async Task DeleteEmployee(int id)
         {
-            var result = await _http.DeleteAsync($"api/employee/{id}");
+            var result = await _http.DeleteAsync($"api/employees/{id}");
             await SetEmployee(result);
         }
 
@@ -46,7 +46,7 @@ namespace BlazorFullStackCrud.Client.Services.EmployeeService
 
         public async Task<Employee> GetSingleEmployee(int id)
         {
-            var result = await _http.GetFromJsonAsync<Employee>($"api/employee/{id}");
+            var result = await _http.GetFromJsonAsync<Employee>($"api/employees/{id}");
             if (result != null)
                 return result;
             throw new Exception("Employee not found!");
@@ -54,14 +54,14 @@ namespace BlazorFullStackCrud.Client.Services.EmployeeService
 
         public async Task GetEmployees()
         {
-            var result = await _http.GetFromJsonAsync<List<Employee>>("api/employee");
+            var result = await _http.GetFromJsonAsync<List<Employee>>("api/employees");
             if (result != null)
                 Employees = result;
         }
 
         public async Task UpdateEmployee(Employee emp)
         {
-            var result = await _http.PutAsJsonAsync($"api/employee/{emp.Id}", emp);
+            var result = await _http.PutAsJsonAsync($"api/employees/{emp.Id}", emp);
             await SetEmployee(result);
         }
     }
